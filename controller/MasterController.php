@@ -15,7 +15,14 @@
             $preload = new Preload();
             $connection = $preload->conn;
 
-            
+            $sql = "INSERT INTO user_table (name, organisation, email, mobile, enquiry)VALUES (?,?,?,?,?)";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bind_param("sss", $name, $organisation, $email);
+
+
+            // start from here..... data saving process.
+
         }
 
 
