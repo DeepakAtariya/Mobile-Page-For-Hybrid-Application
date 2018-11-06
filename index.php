@@ -1,14 +1,19 @@
 
 <?php
 include 'resources/bootstrap.php';
-include 'resources/layout.php';
+require 'resources/preload.php';
+
+//get Service data
+
 ?>
 
 <div class="container jumbotron" style="background-color:white">
     <!-- Button to Open the Modal -->
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-    Ask!
+    Ask! 
   </button>
+    <p><?php  ?></p>
+  
 
   <!-- The Modal -->
   <div class="modal fade" id="myModal">
@@ -23,26 +28,39 @@ include 'resources/layout.php';
         
         <!-- Modal body -->
         <div class="modal-body">
-            <form action="/" >
+            <form action="controller/MasterController.php" method="post">
+
+                <div class="form-group">
+                  <label for=""></label>
+                  <select class="form-control" name="serviceProduct" id="serviceProduct">
+                    <?php 
+                        foreach ($msg as $row) {?>
+                            <option value="<?php echo $row["name"] ?>"><?php echo $row["name"] ?></option>
+                        <?php
+                        }
+                        ?>
+                    
+                  </select>
+                </div>
                 <div class="form-group">
                     <label for="name">Name :</label>
-                    <input type="text" class="form-control" id="username" required>
+                    <input type="text" class="form-control" name="username" id="username" required>
                 </div>
                 <div class="form-group">
                     <label for="name">Organisation :</label>
-                    <input type="text" class="form-control" id="organisation" required>
+                    <input type="text" class="form-control" name="organisation" id="organisation" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email address:</label>
-                    <input type="email" class="form-control" id="emailAddress" required>
+                    <input type="email" class="form-control" name="emailAddress" id="emailAddress" required>
                 </div>
                 <div class="form-group">
                     <label for="number">Mobile :</label>
-                    <input type="text" maxlength=10 class="form-control" id="mobile" required>
+                    <input type="text" maxlength=10 class="form-control" name="mobile" id="mobile" required>
                 </div>
                 <div class="form-group">
                     <label for="comment">What is your enquiry :</label>
-                    <textarea class="form-control" id="enquiry" rows="3" required></textarea>
+                    <textarea class="form-control" name="enquiry" id="enquiry" rows="3" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary" id="submit">Submit</button>
             </form>
