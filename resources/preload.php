@@ -1,6 +1,7 @@
 <?php
 
 $msg = "sample";
+$servicPersonEmail ="";
 
     class Preload{
 
@@ -31,6 +32,19 @@ $msg = "sample";
             }
 
         }
+        function getServicePersonEmail($service){
+            // $sql = "SELECT email from serviceproduct_table where 'service'"."="."'".$service."'";
+            $sql = "SELECT `email` FROM `serviceproduct_table` WHERE `serviceproduct_table`.`name`='$service'";
+            $result = $this->conn->query($sql);
+
+            if($result->num_rows>0){
+                return $result;
+            }else{
+                return "asdasdsadsa";
+            }
+
+        }
+        
     }
 
     $data = new Preload();

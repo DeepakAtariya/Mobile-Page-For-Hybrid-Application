@@ -1,5 +1,6 @@
 <?php
     require '../resources/preload.php';
+    require '../resources/EmailSender.php';
     class MasterController{
     
 
@@ -26,8 +27,19 @@
             $mobile = $this->MasterData[3];
             $enquiry = $this->MasterData[4];
             $service = $this->MasterData[5];
+
             if($stmt->execute()){
-                echo "data saved!";
+                
+                $e = new EmailSender();
+                $e->sendEmail($this->MasterData[2],"ACK","This is an ack!");    //this will send email to the person who is enquiring --> ACK mail
+                $result = $preload->getServicePersonEmail($this->MasterData[5]);
+                $concernedPerson = "";
+                foreach ($result as $row) {
+                    $concernedPerson = $row["email"];
+                    // break;
+                }
+                $e->sendEmail($concernedPerson,"Enquiry : ".$service, $enquiry);  //this will send email to concerned person
+                header("Location: http://localhost/phpTask/") or die();
             }else{
                 echo "something went wrong";
             }
