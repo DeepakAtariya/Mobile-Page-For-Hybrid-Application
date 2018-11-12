@@ -8,7 +8,7 @@ $msg = "sample";
         private $username = "root";
         private $password = "";
         private $dbname = "testdatabase";
-        private $conn;
+        public $conn;
         public $shared;
 
         function __construct(){

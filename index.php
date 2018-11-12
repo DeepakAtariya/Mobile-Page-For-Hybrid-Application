@@ -32,10 +32,13 @@ require 'resources/preload.php';
 
                 <div class="form-group">
                   <label for=""></label>
+                  <!--  max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis; -->
                   <select class="form-control" name="serviceProduct" id="serviceProduct">
                     <?php 
                         foreach ($msg as $row) {?>
-                            <option value="<?php echo $row["name"] ?>"><?php echo $row["name"] ?></option>
+                            <option style="max-width:100%;overflow:hidden;text-overflow:ellipsis" value="<?php echo $row["name"] ?>"><?php echo $row["name"] ?></option>
                         <?php
                         }
                         ?>

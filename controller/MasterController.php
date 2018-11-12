@@ -1,5 +1,5 @@
 <?php
-    include 'resources/preload.php';
+    require '../resources/preload.php';
     class MasterController{
     
 
@@ -15,11 +15,25 @@
             $preload = new Preload();
             $connection = $preload->conn;
 
-            $sql = "INSERT INTO user_table (name, organisation, email, mobile, enquiry)VALUES (?,?,?,?,?)";
+            $sql = "INSERT INTO user_table (name, organisation, email, mobile, enquiry, serviceProduct)VALUES (?,?,?,?,?,?)";
 
             $stmt = $connection->prepare($sql);
-            $stmt->bind_param("sss", $name, $organisation, $email);
+            $stmt->bind_param("ssssss", $name, $organisation, $email, $mobile, $enquiry, $service);
 
+            $name = $this->MasterData[0];
+            $organisation = $this->MasterData[1];
+            $email = $this->MasterData[2];
+            $mobile = $this->MasterData[3];
+            $enquiry = $this->MasterData[4];
+            $service = $this->MasterData[5];
+            if($stmt->execute()){
+                echo "data saved!";
+            }else{
+                echo "something went wrong";
+            }
+
+
+            $stmt->close();
 
             // start from here..... data saving process.
 
