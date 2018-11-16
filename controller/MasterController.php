@@ -54,7 +54,7 @@
 
     }
     
-    $data = new MasterController(array($_POST["username"],$_POST["organisation"],$_POST["emailAddress"],$_POST["mobile"],$_POST["enquiry"],$_POST["serviceProduct"]));
+    $data = new MasterController(array($_GET["username"],$_GET["organisation"],$_GET["emailAddress"],$_GET["mobile"],$_GET["enquiry"],$_GET["serviceProduct"]));
     $data->onSave();
 
 

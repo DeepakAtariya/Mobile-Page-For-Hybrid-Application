@@ -1,4 +1,44 @@
+<html>
+    <head>
+        <script>
+            var ajaxreq = new XMLHttpRequest();
+            
+            function ajaxcall() { 
+                ajaxreq.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status ==200 || this.status ==302){
+                        // document.getElementById("space").innerHTML=this.responseText;
+                        document.getElementById("modelBody").style.display = 'none';
+                        document.getElementById("space").style.display = 'block';
+                    }else{
+                        document.getElementById("modelBody").style.display = 'none';
+                        document.getElementById("space").style.display = 'block';
+                        // document.getElementById("space").innerHTML = "Error!";
+                    }
+                };
+                var username = document.getElementById("username").value;
+                var organisation = document.getElementById("organisation").value;
+                var emailAddress = document.getElementById("emailAddress").value;
+                var mobile = document.getElementById("mobile").value;
+                var enquiry = document.getElementById("enquiry").value;
+                var serviceProduct = document.getElementById("serviceProduct").value;
+                
+                // if(!username === "" && !organisation.isEmpty() && ! (!emailAddress.isEmpty() && emailAddress.includes("@") && emailAddress.includes(".")) && (!mobile.isEmpty() && Number(mobile)!=="NaN") && !enquiry.isEmpty() && !serviceProduct.includes("null")){
+                if(username !== "" && organisation !== "" && emailAddress !== "" && mobile !== "" && enquiry !== "" && !serviceProduct.includes("null")){
+                        if(emailAddress.includes("@") && emailAddress.includes(".") && !isNaN(Number(mobile))){
+                            ajaxreq.open("POST","controller/MasterController.php?username="+username+"&organisation="+organisation+"&emailAddress="+emailAddress+"&mobile="+mobile+"&enquiry="+enquiry+"&serviceProduct="+serviceProduct, true);
+                            ajaxreq.send();
+                        }else{
+                            alert("Invalid Input!");
+                        }
+                }else{
+                    alert("Enter Values!");
+                }
+                
+            }
+        </script>
 
+    </head>
+    <body>
 <?php
 include 'resources/bootstrap.php';
 require 'resources/preload.php';
@@ -26,13 +66,17 @@ require 'resources/preload.php';
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
+        <!-- Service message -->
+        <h2 class="text-center" id="space" style="display:none">Thank you!</h2>
+
         <!-- Modal body -->
-        <div class="modal-body">
-            <form action="controller/MasterController.php" method="post">
+        <div class="modal-body" id="modelBody">
+            <form>
 
                 <div class="form-group">
                   <label for=""></label>
                   <select class="form-control" name="serviceProduct" id="serviceProduct">
+                            <option style="max-width:100%;overflow:hidden;text-overflow:ellipsis" value="null">Select item...</option>
                     <?php 
                         foreach ($msg as $row) {?>
                             <option style="max-width:100%;overflow:hidden;text-overflow:ellipsis" value="<?php echo $row["name"] ?>"><?php echo $row["name"] ?></option>
@@ -62,7 +106,7 @@ require 'resources/preload.php';
                     <label for="comment">What is your enquiry :</label>
                     <textarea class="form-control" name="enquiry" id="enquiry" rows="3" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                <button type="button" class="btn btn-primary" id="submit" onclick="ajaxcall()">Submit</button>
             </form>
            
         </div>
@@ -89,3 +133,5 @@ require 'resources/preload.php';
     //     });
     // });
 </script>
+
+</body></html>
