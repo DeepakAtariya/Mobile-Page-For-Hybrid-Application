@@ -5,16 +5,25 @@
             
             function ajaxcall() { 
                 ajaxreq.onreadystatechange = function(){
-                    if(this.readyState == 4 && this.status ==200 || this.status ==302){
+                    if(this.readyState == 4 && this.status ==200 || this.status == 302){
                         // document.getElementById("space").innerHTML=this.responseText;
                         document.getElementById("modelBody").style.display = 'none';
                         document.getElementById("space").style.display = 'block';
+                        
+                        // modelfooter.appendChild(aTag);
                     }else{
                         document.getElementById("modelBody").style.display = 'none';
                         document.getElementById("space").style.display = 'block';
                         // document.getElementById("space").innerHTML = "Error!";
                     }
                 };
+                var modelfooter = document.getElementById("modelfooter");
+                var aTag = document.createElement('a');
+                aTag.className = "btn btn-secondary";
+                aTag.setAttribute('href',"http://localhost/phpTask/");
+                aTag.innerHTML = "Another Response";
+                modelfooter.appendChild(aTag);
+
                 var username = document.getElementById("username").value;
                 var organisation = document.getElementById("organisation").value;
                 var emailAddress = document.getElementById("emailAddress").value;
@@ -112,7 +121,7 @@ require 'resources/preload.php';
         </div>
         
         <!-- Modal footer -->
-        <div class="modal-footer">
+        <div class="modal-footer" id="modelfooter">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
         
