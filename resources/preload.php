@@ -22,7 +22,7 @@ $servicPersonEmail ="";
         
 
         function getServiceProductName(){
-            $sql = "SELECT name from serviceproduct_table";
+            $sql = "SELECT id, name from serviceproduct_table";
             $result = $this->conn->query($sql);
 
             if($result->num_rows>0){
@@ -41,23 +41,6 @@ $servicPersonEmail ="";
                 return $result;
             }else{
                 return "asdasdsadsa";
-            }
-
-        }
-
-        function getServiceId($service){
-            
-            $sql = "SELECT `id` FROM `serviceproduct_table` WHERE `serviceproduct_table`.`name`='$service'";
-            $result = $this->conn->query($sql);
-
-            if($result->num_rows>0){
-                foreach ($result as $row) {
-                    $id = $row["id"];
-                    return $id;
-                    // break;
-                }
-            }else{
-                return 0;
             }
 
         }

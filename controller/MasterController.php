@@ -26,8 +26,7 @@
             $email = $this->MasterData[2];
             $mobile = $this->MasterData[3];
             $enquiry = $this->MasterData[4];
-            // $service = $this->MasterData[5];
-            $service = $preload->getServiceId($this->MasterData[5]);
+            $service = $this->MasterData[5];
 
             if($stmt->execute()){
                 
@@ -41,7 +40,6 @@
                     // break;
                 }
                 $e->sendEmail($concernedPerson,"Enquiry : ".$service, $enquiry);  //this will send email to concerned person
-                // header("Location: http://localhost/phpTask/") or die();
             }else{
                 echo "something went wrong";
             }
@@ -51,7 +49,7 @@
 
     }
     
-    $data = new MasterController(array($_GET["username"],$_GET["organisation"],$_GET["emailAddress"],$_GET["mobile"],$_GET["enquiry"],$_GET["serviceProduct"]));
+    $data = new MasterController(array($_GET["name"],$_GET["organisation"],$_GET["emailAddress"],$_GET["mobile"],$_GET["enquiry"],$_GET["serviceProduct"]));
     $data->onSave();
 
 

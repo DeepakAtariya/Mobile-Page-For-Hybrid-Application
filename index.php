@@ -24,16 +24,16 @@
                 aTag.innerHTML = "Another Response";
                 modelfooter.appendChild(aTag);
 
-                var username = document.getElementById("username").value;
+                var name = document.getElementById("name").value;
                 var organisation = document.getElementById("organisation").value;
                 var emailAddress = document.getElementById("emailAddress").value;
                 var mobile = document.getElementById("mobile").value;
                 var enquiry = document.getElementById("enquiry").value;
                 var serviceProduct = document.getElementById("serviceProduct").value;
                 
-                if(username !== "" && organisation !== "" && emailAddress !== "" && mobile !== "" && enquiry !== "" && !serviceProduct.includes("null")){
+                if(name !== "" && organisation !== "" && emailAddress !== "" && mobile !== "" && enquiry !== "" && !serviceProduct.includes("null")){
                         if(emailAddress.includes("@") && emailAddress.includes(".") && !isNaN(Number(mobile))){
-                            ajaxreq.open("POST","controller/MasterController.php?username="+username+"&organisation="+organisation+"&emailAddress="+emailAddress+"&mobile="+mobile+"&enquiry="+enquiry+"&serviceProduct="+serviceProduct, true);
+                            ajaxreq.open("POST","controller/MasterController.php?name="+name+"&organisation="+organisation+"&emailAddress="+emailAddress+"&mobile="+mobile+"&enquiry="+enquiry+"&serviceProduct="+serviceProduct, true);
                             ajaxreq.send();
                         }else{
                             alert("Invalid Input!");
@@ -86,7 +86,7 @@ require 'resources/preload.php';
                             <option style="max-width:100%;overflow:hidden;text-overflow:ellipsis" value="null">Select item...</option>
                     <?php 
                         foreach ($msg as $row) {?>
-                            <option style="max-width:100%;overflow:hidden;text-overflow:ellipsis" value="<?php echo $row["name"] ?>"><?php echo $row["name"] ?></option>
+                            <option style="max-width:100%;overflow:hidden;text-overflow:ellipsis" value="<?php echo $row["id"] ?>"><?php echo $row["name"] ?></option>
                         <?php
                         }
                         ?>
@@ -95,7 +95,7 @@ require 'resources/preload.php';
                 </div>
                 <div class="form-group">
                     <label for="name">Name :</label>
-                    <input type="text" class="form-control" name="username" id="username" required>
+                    <input type="text" class="form-control" name="name" id="name" required>
                 </div>
                 <div class="form-group">
                     <label for="name">Organisation :</label>
