@@ -31,7 +31,6 @@
                 var enquiry = document.getElementById("enquiry").value;
                 var serviceProduct = document.getElementById("serviceProduct").value;
                 
-                // if(!username === "" && !organisation.isEmpty() && ! (!emailAddress.isEmpty() && emailAddress.includes("@") && emailAddress.includes(".")) && (!mobile.isEmpty() && Number(mobile)!=="NaN") && !enquiry.isEmpty() && !serviceProduct.includes("null")){
                 if(username !== "" && organisation !== "" && emailAddress !== "" && mobile !== "" && enquiry !== "" && !serviceProduct.includes("null")){
                         if(emailAddress.includes("@") && emailAddress.includes(".") && !isNaN(Number(mobile))){
                             ajaxreq.open("POST","controller/MasterController.php?username="+username+"&organisation="+organisation+"&emailAddress="+emailAddress+"&mobile="+mobile+"&enquiry="+enquiry+"&serviceProduct="+serviceProduct, true);
@@ -42,7 +41,6 @@
                 }else{
                     alert("Enter Values!");
                 }
-                
             }
         </script>
 
