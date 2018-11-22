@@ -1,87 +1,75 @@
 <?php
+    require 'vendor/autoload.php';
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-    require '../resources/preload.php';
-    require '../resources/EmailSender.php';
-    class MasterController{
+    require 'preload.php';
     
 
-        private $MasterData = array();
-        private $conf;
+        $MasterData = array($_GET["name"],$_GET["organisation"],$_GET["emailAddress"],$_GET["mobile"],$_GET["enquiry"],$_GET["serviceProduct"]);
+         
         
-        function __construct($arr){
-            $this->MasterData = $arr;
+        $preload = new Preload();
+        $connection = $preload->conn;
+        $sql = "INSERT INTO user_table (name, organisation, email, mobile, enquiry, serviceProduct)VALUES (?,?,?,?,?,?)";
+        
+        $stmt = $connection->prepare($sql);
+        $stmt->bind_param("ssssss", $name, $organisation, $email, $mobile, $enquiry, $service);
+        
+        $name = $MasterData[0];
+        $organisation = $MasterData[1];
+        $email = $MasterData[2];
+        $mobile = $MasterData[3];
+        $enquiry = $MasterData[4];
+        $service = $MasterData[5];
+
+        if($stmt->execute()){
+            echo "<script>console.log('database passed!')</script>";
+        }else{
+            echo "<script>console.log('database failed!')</script>";
         }
+        $stmt->close();
 
-        function onSave(){
-            $preload = new Preload();
-            $connection = $preload->conn;
-
-            $sql = "INSERT INTO user_table (name, organisation, email, mobile, enquiry, serviceProduct)VALUES (?,?,?,?,?,?)";
-
-            $stmt = $connection->prepare($sql);
-            $stmt->bind_param("ssssss", $name, $organisation, $email, $mobile, $enquiry, $service);
-
-            $name = $this->MasterData[0];
-            $organisation = $this->MasterData[1];
-            $email = $this->MasterData[2];
-            $mobile = $this->MasterData[3];
-            $enquiry = $this->MasterData[4];
-            $service = $this->MasterData[5];
-
-            if($stmt->execute()){
-                
-                //fetching data from configuration json file
-                $str = file_get_contents("..\\conf.json");
-                $this->conf = json_decode($str, true);
-
-                //PHP mailer code to configure mail server and sending process
-
-                $mail = new PHPMailer();
-                // $mail->SMTPDebug = 4;                                 
-                $mail->isSMTP();                                      
-                $mail->Host = $this->conf['host']; 
-                $mail->Port = $this->conf['port'];                           
-                $mail->SMTPSecure = $this->conf['security'];   
-                $mail->SMTPAuth = true;                         
-                $mail->Username = $this->conf['username'];                                  
-                $mail->Password = $this->conf['password'];  
-                
-                $mail->setFrom('codolic127@gmail.com');
-                $mail->addAddress('deepakkumaratariya@gmail.com');
-        
-                $mail->isHTML(false);
-                $mail->Subject = "ack";
-                $mail->Body    = "ack body";
-                if (!$mail->send()) {
-                    echo "<script>console.log('message not sent')</script>";
-                }
-                else {
-                    echo "<script>console.log('message sent')</script>";
-                }
+        //this will send email to the person who is enquiring --> Acknowledgement mail
+        sendEmail($MasterData[2],"Acknowledgement","This is an acknowledgement!");   
+            
+        //fetching concerned person email id to send query
+        $result = $preload->getServicePersonEmail($MasterData[5]);
+        $concernedPerson = "";
+        foreach ($result as $row) {
+            $concernedPerson = $row["email"];
+        }
+        //send enquiry mail to concerned person
+        sendEmail($concernedPerson,"Enquiry : ".$service, $enquiry); 
 
 
-                $e->sendEmail($this->MasterData[2],"ACK","This is an ack!");    //this will send email to the person who is enquiring --> ACK mail
-                $result = $preload->getServicePersonEmail($this->MasterData[5]);
-                $concernedPerson = "";
+        function sendEmail($email, $sub, $msg){
+            //fetching data from configuration json file
+            $str = file_get_contents("conf.json");
+            $conf = json_decode($str, true);
 
-                foreach ($result as $row) {
-                    $concernedPerson = $row["email"];
-                    // break;
-                }
-                $e->sendEmail($concernedPerson,"Enquiry : ".$service, $enquiry);  //this will send email to concerned person
-            }else{
-                echo "something went wrong";
+            //code of sending email
+            $mail = new PHPMailer();
+            // $mail->SMTPDebug = 4;                                 
+            $mail->isSMTP();                                      
+            $mail->Host = $conf['host']; 
+            $mail->Port = $conf['port'];                           
+            $mail->SMTPSecure = $conf['security'];   
+            $mail->SMTPAuth = true;                         
+            $mail->Username = $conf['username'];                                  
+            $mail->Password = $conf['password'];  
+            
+            //modify it 
+            $mail->setFrom('email@gmail.com');
+            $mail->addAddress($email);
+    
+            $mail->isHTML(false);
+            $mail->Subject = $sub;
+            $mail->Body    = $msg;
+            if ($mail->send()) {
+                echo "<script>console.log('message sent')</script>";
             }
-            $stmt->close();
+            else {
+                echo "<script>console.log('message not sent')</script>";
+            }  
         }
-
-
-    }
-    
-    $data = new MasterController(array($_GET["name"],$_GET["organisation"],$_GET["emailAddress"],$_GET["mobile"],$_GET["enquiry"],$_GET["serviceProduct"]));
-    $data->onSave();
-
-
-
 ?>

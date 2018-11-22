@@ -1,5 +1,5 @@
 <?php 
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 
 ?>
 
@@ -61,8 +61,7 @@ require '../vendor/autoload.php';
     </head>
     <body>
 <?php
-include 'resources/bootstrap.php';
-require 'resources/preload.php';
+require 'preload.php';
 
 //get Service data
 
