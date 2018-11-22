@@ -1,5 +1,19 @@
+<?php 
+require '../vendor/autoload.php';
+
+?>
+
 <html>
     <head>
+  <!-- <title>Bootstrap Example</title> -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+
         <script>
             var ajaxreq = new XMLHttpRequest();
             
@@ -33,7 +47,7 @@
                 
                 if(name !== "" && organisation !== "" && emailAddress !== "" && mobile !== "" && enquiry !== "" && !serviceProduct.includes("null")){
                         if(emailAddress.includes("@") && emailAddress.includes(".") && !isNaN(Number(mobile))){
-                            ajaxreq.open("POST","controller/MasterController.php?name="+name+"&organisation="+organisation+"&emailAddress="+emailAddress+"&mobile="+mobile+"&enquiry="+enquiry+"&serviceProduct="+serviceProduct, true);
+                            ajaxreq.open("POST","MasterController.php?name="+name+"&organisation="+organisation+"&emailAddress="+emailAddress+"&mobile="+mobile+"&enquiry="+enquiry+"&serviceProduct="+serviceProduct, true);
                             ajaxreq.send();
                         }else{
                             alert("Invalid Input!");

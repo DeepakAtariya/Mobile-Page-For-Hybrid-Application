@@ -19,8 +19,6 @@ $servicPersonEmail ="";
                 $this->conn=null;
             } 
         }
-        
-
         function getServiceProductName(){
             $sql = "SELECT id, name from serviceproduct_table";
             $result = $this->conn->query($sql);
