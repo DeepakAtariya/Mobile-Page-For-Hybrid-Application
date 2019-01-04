@@ -72,4 +72,51 @@
                 echo "<script>console.log('message not sent')</script>";
             }  
         }
+
+        //_____________________Salesforce_____________
+        // Get cURL resource
+$curl = curl_init();
+
+//change url 
+curl_setopt_array($curl, array(
+    CURLOPT_RETURNTRANSFER => 1,
+    CURLOPT_URL => 'https://login.salesforce.com/services/oauth2/token?grant_type=password&client_id=3MVG9pe2TCoA1Pf6Iid1ED4rt4dd3UYoGmzofPc44JOKJt00DTy8SGWAkSbv3P0RvJQe8O09sc8iZLZg8MG4Q&client_secret=1115869310109997129&username=deepakatariya@abc.com&password=Deepak@123NWUtIFlmipmcJQeAjvhl0GXu',
+    CURLOPT_POST => 1
+));
+
+// Send the request & save response to $resp
+$resp = curl_exec($curl);
+// echo $resp."<br>";
+
+echo wordwrap($resp, 180,"<br>\n", TRUE);
+
+$s_login_reponse = json_decode($resp, true);
+$access_token = $s_login_reponse['access_token'];
+$instance_url = $s_login_reponse['instance_url'];
+$id = $s_login_reponse['id'];
+$token_type = $s_login_reponse['token_type'];
+$issued_at = $s_login_reponse['issued_at'];
+$signature = $s_login_reponse['signature'];
+
+
+//to save the data into salesforce 
+$req1 = curl_init();
+
+$content = json_encode(array("")); //varies on the fields
+
+curl_setopt_array($req1, array(
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_URL => $instance_url."/services/data/v44.0/sobjects/case/",
+    CURLOPT_HEADER => false,
+    CURLOPT_HTTPHEADER => array("Authorization: OAuth $access_token","Content-type: application/json"),
+    CURLOPT_POST => 1,
+    CURLOPT_POSTFIELDS => $contents
+));
+$response = curl_exec($req1);
+
+
+curl_close($req1);
+curl_close($curl);
+
+
 ?>

@@ -80,7 +80,7 @@ CREATE TABLE `user_table` (
   `organisation` text NOT NULL,
   `email` varchar(255) NOT NULL,
   `mobile` varchar(20) NOT NULL,
-  `enquiry` text NOT NULL,
+  `enquiry` text NOT NULL,ou
   `serviceProduct` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
