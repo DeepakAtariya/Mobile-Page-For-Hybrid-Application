@@ -20,34 +20,41 @@ require 'vendor/autoload.php';
             function ajaxcall() { 
                 ajaxreq.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status ==200 || this.status == 302){
+
+                        console.log(ajaxreq.responseText);
                         // document.getElementById("space").innerHTML=this.responseText;
                         document.getElementById("modelBody").style.display = 'none';
                         document.getElementById("space").style.display = 'block';
                         
                         // modelfooter.appendChild(aTag);
+                        var modelfooter = document.getElementById("modelfooter");
+                        var aTag = document.createElement('a');
+                        aTag.className = "btn btn-secondary";
+                        aTag.setAttribute('href',"http://localhost/phpTask/");
+                        aTag.innerHTML = "Another Response";
+                        modelfooter.appendChild(aTag);
                     }else{
+                        console.log("failure!"+ajaxreq.responseText);
                         document.getElementById("modelBody").style.display = 'none';
                         document.getElementById("space").style.display = 'block';
                         // document.getElementById("space").innerHTML = "Error!";
+                        
                     }
                 };
-                var modelfooter = document.getElementById("modelfooter");
-                var aTag = document.createElement('a');
-                aTag.className = "btn btn-secondary";
-                aTag.setAttribute('href',"http://localhost/phpTask/");
-                aTag.innerHTML = "Another Response";
-                modelfooter.appendChild(aTag);
-
-                var name = document.getElementById("name").value;
+                
+                var salut = document.getElementById("salut").value;
+                var last_name = document.getElementById("last_name").value;
+                var first_name = document.getElementById("first_name").value;
                 var organisation = document.getElementById("organisation").value;
                 var emailAddress = document.getElementById("emailAddress").value;
                 var mobile = document.getElementById("mobile").value;
                 var enquiry = document.getElementById("enquiry").value;
                 var serviceProduct = document.getElementById("serviceProduct").value;
+                console.log(serviceProduct);
                 
-                if(name !== "" && organisation !== "" && emailAddress !== "" && mobile !== "" && enquiry !== "" && !serviceProduct.includes("null")){
+                if(salut !== "0" && last_name !== "" && first_name !== "" && organisation !== "" && emailAddress !== "" && mobile !== "" && enquiry !== "" && !serviceProduct.includes("null")){
                         if(emailAddress.includes("@") && emailAddress.includes(".") && !isNaN(Number(mobile))){
-                            ajaxreq.open("POST","MasterController.php?name="+name+"&organisation="+organisation+"&emailAddress="+emailAddress+"&mobile="+mobile+"&enquiry="+enquiry+"&serviceProduct="+serviceProduct, true);
+                            ajaxreq.open("POST","MasterController.php?"+"salut="+salut+"&first_name="+first_name+"&last_name="+last_name+"&organisation="+organisation+"&emailAddress="+emailAddress+"&mobile="+mobile+"&enquiry="+enquiry+"&serviceProduct="+serviceProduct, true);
                             ajaxreq.send();
                         }else{
                             alert("Invalid Input!");
@@ -94,7 +101,7 @@ require 'preload.php';
             <form>
 
                 <div class="form-group">
-                  <label for=""></label>
+                  <label for="">Service:</label>
                   <select class="form-control" name="serviceProduct" id="serviceProduct">
                             <option style="max-width:100%;overflow:hidden;text-overflow:ellipsis" value="null">Select item...</option>
                     <?php 
@@ -107,11 +114,25 @@ require 'preload.php';
                   </select>
                 </div>
                 <div class="form-group">
-                    <label for="name">Name :</label>
-                    <input type="text" class="form-control" name="name" id="name" required>
+                    <label for=''>Salutation:</label>
+                    <select name="salut" id="salut" class="form-control dropdown-select">
+                        <option value="0">Select...</option>
+                        <option value="Ms.">Ms.</option>
+                        <option value="Mr.">Mr.</option>
+						<option value="Mrs.">Mrs.</option>
+                        <option value="Dr.">Dr.</option>
+					</select>
                 </div>
                 <div class="form-group">
-                    <label for="name">Organisation :</label>
+                    <label for="first_name">First Name:</label>
+                    <input type="text" class="form-control" name="first_name" id="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name:</label>
+                    <input type="text" class="form-control" name="last_name" id="last_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="name">Organisation:</label>
                     <input type="text" class="form-control" name="organisation" id="organisation" required>
                 </div>
                 <div class="form-group">
@@ -119,11 +140,11 @@ require 'preload.php';
                     <input type="email" class="form-control" name="emailAddress" id="emailAddress" required>
                 </div>
                 <div class="form-group">
-                    <label for="number">Mobile :</label>
+                    <label for="number">Mobile:</label>
                     <input type="text" maxlength=10 class="form-control" name="mobile" id="mobile" required>
                 </div>
                 <div class="form-group">
-                    <label for="comment">What is your enquiry :</label>
+                    <label for="comment">Enquiry:</label>
                     <textarea class="form-control" name="enquiry" id="enquiry" rows="3" required></textarea>
                 </div>
                 <button type="button" class="btn btn-primary" id="submit" onclick="ajaxcall()">Submit</button>

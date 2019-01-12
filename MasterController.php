@@ -4,42 +4,50 @@
     use PHPMailer\PHPMailer\Exception;
     require 'preload.php';
     
-
-        $MasterData = array($_GET["name"],$_GET["organisation"],$_GET["emailAddress"],$_GET["mobile"],$_GET["enquiry"],$_GET["serviceProduct"]);
+        $MasterData = array($_GET["salut"],$_GET["first_name"],$_GET["last_name"],$_GET["organisation"],$_GET["emailAddress"],$_GET["mobile"],$_GET["enquiry"],$_GET["serviceProduct"]);
          
         
         $preload = new Preload();
         $connection = $preload->conn;
-        $sql = "INSERT INTO user_table (name, organisation, email, mobile, enquiry, serviceProduct)VALUES (?,?,?,?,?,?)";
+        $sql = "INSERT INTO user_table (salut, first_name, last_name, organisation, email, mobile, enquiry, serviceProduct)VALUES (?,?,?,?,?,?,?,?)";
         
         $stmt = $connection->prepare($sql);
-        $stmt->bind_param("ssssss", $name, $organisation, $email, $mobile, $enquiry, $service);
+        $stmt->bind_param("ssssssss", $salut, $first_name, $last_name, $organisation, $email, $mobile, $enquiry, $service);
         
-        $name = $MasterData[0];
-        $organisation = $MasterData[1];
-        $email = $MasterData[2];
-        $mobile = $MasterData[3];
-        $enquiry = $MasterData[4];
-        $service = $MasterData[5];
+        $salut = $MasterData[0];
+        $first_name = $MasterData[1];
+        $last_name = $MasterData[2];
+        $organisation = $MasterData[3];
+        $email = $MasterData[4];
+        $mobile = $MasterData[5];
+        $enquiry = $MasterData[6];
+        $service = $MasterData[7];
+        echo "<script>console.log($service)</script>";
 
         if($stmt->execute()){
             echo "<script>console.log('database passed!')</script>";
+            echo "db passed!";
         }else{
             echo "<script>console.log('database failed!')</script>";
+            echo "db failed";
         }
         $stmt->close();
 
         //this will send email to the person who is enquiring --> Acknowledgement mail
-        sendEmail($MasterData[2],"Acknowledgement","This is an acknowledgement!");   
+        sendEmail($MasterData[4],"Acknowledgement","This is an acknowledgement!");   
             
         //fetching concerned person email id to send query
-        $result = $preload->getServicePersonEmail($MasterData[5]);
+        $result = $preload->getServicePersonEmail($MasterData[7]);
         $concernedPerson = "";
+        $serviceName = "";
         foreach ($result as $row) {
-            $concernedPerson = $row["email"];
+            $concernedPersonEmail = $row["email"];
+            // $serviceName = $row['name'];
+            $serviceName = $row['name'];
+            echo "<script>console.log($serviceName)</script>";
         }
         //send enquiry mail to concerned person
-        sendEmail($concernedPerson,"Enquiry : ".$service, $enquiry); 
+        sendEmail($concernedPersonEmail,"Enquiry : ".$service, $enquiry); 
 
 
         function sendEmail($email, $sub, $msg){
@@ -73,14 +81,17 @@
             }  
         }
 
-        //_____________________Salesforce_____________
+
+        //_____________________Salesforce________________
         // Get cURL resource
 $curl = curl_init();
+
+$url = "https://login.salesforce.com/services/oauth2/token?grant_type=password&client_id=3MVG9Y6d_Btp4xp76NSMJwOCsLHqPtjfzrCyTfAeaa_res0rFB1A96yHh95lUMBZxDXQod4AgHqIk2xzereZh&client_secret=8824295677123680664&username=divcoordinator@teri.res.in&password=C@R@M_2019#TERI1HalJIfuCrvYSQFSwPlSvPnzk";
 
 //change url 
 curl_setopt_array($curl, array(
     CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => 'https://login.salesforce.com/services/oauth2/token?grant_type=password&client_id=3MVG9pe2TCoA1Pf6Iid1ED4rt4dd3UYoGmzofPc44JOKJt00DTy8SGWAkSbv3P0RvJQe8O09sc8iZLZg8MG4Q&client_secret=1115869310109997129&username=deepakatariya@abc.com&password=Deepak@123NWUtIFlmipmcJQeAjvhl0GXu',
+    CURLOPT_URL => $url,
     CURLOPT_POST => 1
 ));
 
@@ -102,21 +113,22 @@ $signature = $s_login_reponse['signature'];
 //to save the data into salesforce 
 $req1 = curl_init();
 
-$content = json_encode(array("")); //varies on the fields
+$content = json_encode(array("Contact_Email__c"=>$email,"Contact_Number__c"=>$mobile,"Created_Date__c"=>date("Y/m/d"),"Enquiry__c"=>$enquiry,"First_Name__c"=>$first_name,"Last_Name__c"=>$last_name,"Organisatin_Name__c"=>$organisation,"Salution__c"=>$salut,"Service"=>$serviceName)); //varies on the fields
 
 curl_setopt_array($req1, array(
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_URL => $instance_url."/services/data/v44.0/sobjects/case/",
+    CURLOPT_URL => $instance_url."/services/data/v44.0/sobjects/Case/",
     CURLOPT_HEADER => false,
     CURLOPT_HTTPHEADER => array("Authorization: OAuth $access_token","Content-type: application/json"),
     CURLOPT_POST => 1,
     CURLOPT_POSTFIELDS => $contents
 ));
 $response = curl_exec($req1);
-
+echo "<script>console.log($response)</script>";
 
 curl_close($req1);
 curl_close($curl);
+
 
 
 ?>
