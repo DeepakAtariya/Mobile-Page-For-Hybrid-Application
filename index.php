@@ -18,6 +18,7 @@ require 'vendor/autoload.php';
             var ajaxreq = new XMLHttpRequest();
             
             function ajaxcall() { 
+                var file;
                 ajaxreq.onreadystatechange = function(){
                     if(this.readyState == 4 && this.status ==200 || this.status == 302){
 

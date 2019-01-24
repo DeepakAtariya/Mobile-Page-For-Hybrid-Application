@@ -81,7 +81,7 @@
             }  
         }
 
-
+/*
         //_____________________Salesforce________________
         // Get cURL resource
 $curl = curl_init();
@@ -129,6 +129,6 @@ echo "<script>console.log($response)</script>";
 curl_close($req1);
 curl_close($curl);
 
-
+*/
 
 ?>
