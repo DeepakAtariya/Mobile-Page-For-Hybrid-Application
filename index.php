@@ -27,7 +27,7 @@ require 'vendor/autoload.php';
                         document.getElementById("modelBody").style.display = 'none';
                         document.getElementById("space").style.display = 'block';
                         
-                        // modelfooter.appendChild(aTag);
+                        // modelfooter.appenChild(aTag);
                         var modelfooter = document.getElementById("modelfooter");
                         var aTag = document.createElement('a');
                         aTag.className = "btn btn-secondary";
